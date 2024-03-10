@@ -1,0 +1,87 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body class="body_backgorund">
+
+<div align="center">
+    <h1>Paint</h1>
+    <canvas id="myCanvas" width="800" height="600"></canvas>
+    <br><br >
+    <label for="r">Radius:</label>
+    <input type="number" id="Radius" name="r">
+    <label for="c">Color:</label>
+    <input type="text" id="Color" name="c">
+    <label for="w">Width:</label>
+    <input type="number" id="width" name="w">
+</div>
+
+<script type="text/javascript">
+    var mouseEvent = "empty";
+    var last_position_of_x, last_position_of_y;
+    var actual = document.getElementById("Radius").value;
+    var canvas = document.getElementById('myCanvas');
+    var ctx = canvas.getContext("2d");
+    var radius = 20;
+    var color = "black";
+    var width_of_line = 1;
+
+    canvas.addEventListener("mousedown", my_mousedown);
+
+    function my_mousedown(e) {
+        color = document.getElementById("Color").value;
+        width_of_line = document.getElementById("width").value;
+        mouseEvent = "mouseDown";
+    }
+
+    canvas.addEventListener("mousemove", my_mousemove);
+
+    function my_mousemove(e) {
+        var current_position_of_mouse_x = e.clientX - canvas.offsetLeft;
+        var current_position_of_mouse_y = e.clientY - canvas.offsetTop;
+        actual = document.getElementById("Radius").value;
+        width_of_line = document.getElementById("width").value;
+        color = document.getElementById("Color").value;
+
+        if (mouseEvent == "mouseDown") {
+            ctx.beginPath();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = width_of_line;
+            ctx.lineWidth = 2;
+            ctx.arc(current_position_of_mouse_x, current_position_of_mouse_y, actual, 0, 2 * Math.PI);
+            ctx.stroke();
+            console.log("Last position of x and y coordinates = ");
+            console.log("x = " + last_position_of_x + " y = " + last_position_of_y);
+            ctx.moveTo(last_position_of_x, last_position_of_y);
+            console.log("Current position of x and y coordinates = ");
+            console.log("x  = " + current_position_of_mouse_x + "y = " + current_position_of_mouse_y);
+            ctx.lineTo(current_position_of_mouse_x, current_position_of_mouse_y);
+            ctx.stroke();
+        }
+
+        last_position_of_x = current_position_of_mouse_x;
+        last_position_of_y = current_position_of_mouse_y;
+    }
+
+    canvas.addEventListener("mouseup", my_mouseup);
+
+    function my_mouseup(e) {
+        mouseEvent = "mouseUP";
+    }
+
+    canvas.addEventListener("mouseleave", my_mouseleave);
+
+    function my_mouseleave(e) {
+        mouseEvent = "mouseleave";
+    }
+
+    function clearArea() {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    }
+</script>
+<br><br>
+<center>
+<button onclick="clearArea()">Clear Area</button>
+</center>
+</body>
+</html>
